@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 let app = express();
 require("dotenv").config();
 require("./dbConfig/dbConfig");
@@ -24,8 +25,10 @@ let teamRoute = require("./router/OUR_TEAM/ourTeamRouter");
 app.use("/api/v1", teamRoute);
 let aboutRouter = require("./router/ABOUT/aboutRouter");
 app.use("/api/v1", aboutRouter);
-app.get("/", (req, res) => {
-  res.send("hello from server");
+
+app.use(express.static(path.join(__dirname, "./frontend/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "./frontend/dist/index.html"));
 });
 let PORT = process.env.PORT || 9090;
 app.listen(PORT, () => {
